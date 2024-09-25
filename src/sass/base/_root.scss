@@ -1,0 +1,84 @@
+@use '../abstracts' as *;
+
+:root {
+  @each $color, $shade-map in $active-theme {
+    @each $shade, $value in $shade-map {
+      --#{$color}-#{$shade}: #{$value};
+    }
+  }
+
+  @media (prefered-color-scheme: dark) {
+    @each $color, $shade-map in $dark {
+      @each $shade, $value in $shade-map {
+        --#{$color}-#{$shade}: #{$value};
+      }
+    }
+  }
+
+  @each $screen-size, $sizes-map in $font-sizes {
+    @if $screen-size == 'small' {
+      @each $size-name, $size-value in $sizes-map {
+        --fs#{$size-name}: #{$size-value};
+      }
+    } @else {
+      @include mq($screen-size) {
+        @each $size-name, $size-value in $sizes-map {
+          --fs#{$size-name}: #{$size-value};
+        }
+      }
+    }
+  }
+}
+// will generate custom proprties on the basis of manipulation code in the js file which set the data attr and also update the local storage to save the user prefrence
+// note: local storage is just a space in brwsr to store some data u have to manually aply the theme from local storage with the dom loaded or dom content loaded whch is an evnt u can put on window object the most higher object
+body[data-theme='light'] {
+  @each $color, $shade-map in $light {
+    @each $shade, $value in $shade-map {
+      --#{$color}-#{$shade}: #{$value};
+    }
+  }
+}
+
+body[data-theme='dark'] {
+  @each $color, $shade-map in $dark {
+    @each $shade, $value in $shade-map {
+      --#{$color}-#{$shade}: #{$value};
+    }
+  }
+}
+// Adding more themes
+
+// With that set up, you can add as many themes to your site as you want!
+
+// As a quick example, I’m going to add a bunch of global colors:
+
+$-clr-green-300: hsl(150 75% 50%);
+$-clr-purple-300: hsl(280 75% 50%);
+$-clr-blue-100: hsl(200 24% 85%);
+$-clr-blue-200: hsl(200 24% 80%);
+$-clr-blue-300: hsl(200 23% 65%);
+$-clr-blue-400: hsl(200 31% 55%);
+$-clr-blue-700: hsl(200 23% 30%);
+$-clr-blue-800: hsl(200 23% 25%);
+$-clr-blue-900: hsl(200 23% 15%);
+
+// And then make a new color scheme using them:
+
+$sleek: (
+  'neutral': (
+    '100': $-clr-blue-800,
+  ),
+  'accent': (
+    '400': $-clr-green-300,
+    '500': $-clr-purple-300,
+  ),
+  'primary': (
+    '100': $-clr-blue-900,
+    '200': $-clr-blue-800,
+    '300': $-clr-blue-400,
+    '400': $-clr-blue-300,
+    '700': $-clr-blue-200,
+    '800': $-clr-blue-100,
+  ),
+);
+// From there, I can add this to my theme switcher in my index.html file
